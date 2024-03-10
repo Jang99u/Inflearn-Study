@@ -1,6 +1,6 @@
-HELP.md
-.gradle
-build/
+library-app/HELP.md
+library-app/.gradle
+library-app/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
