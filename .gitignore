@@ -1,9 +1,9 @@
 library-app/HELP.md
 library-app/.gradle
 library-app/build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+library-app/!gradle/wrapper/gradle-wrapper.jar
+library-app/!**/src/main/**/build/
+library-app/!**/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -13,9 +13,9 @@ library-app/build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+library-app/bin/
+library-app/!**/src/main/**/bin/
+library-app/!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -24,8 +24,8 @@ library-app/.idea
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+library-app/!**/src/main/**/out/
+library-app/!**/src/test/**/out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -37,6 +37,3 @@ out/
 ### VS Code ###
 .DS_Store
 .vscode/
-
-src/main/resources/application-local.yml
-src/main/resources/application-prod.yml
