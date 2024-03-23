@@ -1,4 +1,4 @@
-package com.group.libraryapp.dto.user.request;
+package com.group.libraryapp.dto.fruit.request;
 
 public class FruitUpdateRequest {
     private int id;

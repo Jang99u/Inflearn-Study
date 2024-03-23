@@ -1,11 +1,9 @@
 package com.group.libraryapp.controller.user;
 
 import com.group.libraryapp.domain.user.User;
-import com.group.libraryapp.dto.user.request.FruitCreateRequest;
-import com.group.libraryapp.dto.user.request.FruitUpdateRequest;
+import com.group.libraryapp.dto.fruit.request.FruitCreateRequest;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
-import com.group.libraryapp.dto.user.response.FruitSaleResponse;
 import com.group.libraryapp.dto.user.response.UserResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -36,11 +34,14 @@ public class UserController {
     @GetMapping("/user")
     public List<UserResponse> getUsers() {
         String sql = "select * from user";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            long id = rs.getLong("id");
-            String name = rs.getString("name");
-            int age = rs.getInt("age");
-            return new UserResponse(id, name, age);
+        return jdbcTemplate.query(sql, new RowMapper<UserResponse>() {
+            @Override
+            public UserResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+                long id = rs.getLong("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                return new UserResponse(id, name, age);
+            }
         });
     }
 
@@ -74,55 +75,5 @@ public class UserController {
                 fruitCreateRequest.getPrice(),
                 fruitCreateRequest.getWarehousingDate(),
                 false);
-    }
-
-    @PutMapping("/api/v1/fruit")
-    public void updateFruit(@RequestBody FruitUpdateRequest fruitUpdateRequest){
-        String readSql = "SELECT * FROM fruit WHERE id = ?";
-        boolean isUserNotExist = jdbcTemplate.query(readSql, (rs, rowNum) -> 0, fruitUpdateRequest.getId()).isEmpty();
-        if (isUserNotExist) {
-            throw new IllegalArgumentException();
-        }
-
-        String sql = "UPDATE fruit SET sold = ? WHERE id = ?";
-        jdbcTemplate.update(sql, true, fruitUpdateRequest.getId());
-    }
-
-    @GetMapping("/api/v1/fruit/stat")
-    public FruitSaleResponse howManySale(@RequestParam String name) {
-        String readSql = "SELECT * FROM fruit WHERE name = ?";
-        boolean isUserNotExist = jdbcTemplate.query(readSql, (rs, rowNum) -> 0, name).isEmpty();
-        if (isUserNotExist) {
-            throw new IllegalArgumentException();
-        }
-
-        String sqlSold = "SELECT * FROM fruit WHERE name = ? AND sold = 1";
-        String sqlNotSold = "SELECT * FROM fruit WHERE name = ? AND sold = 0";
-
-        List<Integer> sqlSoldList = jdbcTemplate.query(sqlSold, new RowMapper<Integer>() {
-            @Override
-            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getInt("price");
-            }
-        }, name);
-
-        List<Integer> sqlNotSoldList = jdbcTemplate.query(sqlNotSold, new RowMapper<Integer>() {
-            @Override
-            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getInt("price");
-            }
-        }, name);
-
-        Integer salePrice = 0;
-        for (int i = 0; i < sqlSoldList.size(); i++) {
-            salePrice += sqlSoldList.get(i);
-        }
-
-        Integer notSalePrice = 0;
-        for (int i = 0; i < sqlNotSoldList.size(); i++) {
-            notSalePrice += sqlNotSoldList.get(i);
-        }
-
-        return new FruitSaleResponse(salePrice, notSalePrice);
     }
 }

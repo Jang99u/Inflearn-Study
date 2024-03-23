@@ -1,8 +1,8 @@
-package com.group.libraryapp.dto.user.response;
+package com.group.libraryapp.dto.fruit.response;
 
 public class FruitSaleResponse {
-    private final int salesAmount;
-    private final int notSalesAmount;
+    private int salesAmount;
+    private int notSalesAmount;
 
     public FruitSaleResponse(int salesAmount, int notSalesAmount) {
         this.salesAmount = salesAmount;
