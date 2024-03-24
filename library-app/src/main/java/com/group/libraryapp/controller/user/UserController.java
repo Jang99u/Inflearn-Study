@@ -5,6 +5,7 @@ import com.group.libraryapp.dto.fruit.request.FruitCreateRequest;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
 import com.group.libraryapp.dto.user.response.UserResponse;
+import com.group.libraryapp.service.user.UserService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final List<User> users = new ArrayList<>();
-
+    private final UserService userService = new UserService();
     private final JdbcTemplate jdbcTemplate;
 
     public UserController(JdbcTemplate jdbcTemplate) {
@@ -47,14 +47,7 @@ public class UserController {
 
     @PutMapping("/user")
     public void updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
-        String readSql = "SELECT * FROM user WHERE id = ?";
-        boolean isUserNotExist = jdbcTemplate.query(readSql, (rs, rowNum) -> 0, userUpdateRequest.getId()).isEmpty();
-        if (isUserNotExist) {
-            throw new IllegalArgumentException();
-        }
-
-        String sql = "UPDATE user SET name = ? WHERE id = ?";
-        jdbcTemplate.update(sql, userUpdateRequest.getName(), userUpdateRequest.getId());
+        userService.updateUser(jdbcTemplate, userUpdateRequest);
     }
 
     @DeleteMapping("/user")
@@ -68,12 +61,4 @@ public class UserController {
         jdbcTemplate.update(sql, name);
     }
 
-    @PostMapping("/api/v1/fruit")
-    public void saveFruit(@RequestBody FruitCreateRequest fruitCreateRequest) {
-        String sql = "INSERT INTO fruit (name, price, stocked_date, sold) values (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, fruitCreateRequest.getName(),
-                fruitCreateRequest.getPrice(),
-                fruitCreateRequest.getWarehousingDate(),
-                false);
-    }
 }

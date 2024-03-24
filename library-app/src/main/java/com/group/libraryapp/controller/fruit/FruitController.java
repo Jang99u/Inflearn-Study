@@ -1,5 +1,6 @@
 package com.group.libraryapp.controller.fruit;
 
+import com.group.libraryapp.dto.fruit.request.FruitCreateRequest;
 import com.group.libraryapp.dto.fruit.request.FruitUpdateRequest;
 import com.group.libraryapp.dto.fruit.response.FruitSaleResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +18,15 @@ public class FruitController {
 
     public FruitController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @PostMapping("/api/v1/fruit")
+    public void saveFruit(@RequestBody FruitCreateRequest fruitCreateRequest) {
+        String sql = "INSERT INTO fruit (name, price, stocked_date, sold) values (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, fruitCreateRequest.getName(),
+                fruitCreateRequest.getPrice(),
+                fruitCreateRequest.getWarehousingDate(),
+                false);
     }
 
     @PutMapping("/api/v1/fruit")
