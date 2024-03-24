@@ -1,20 +1,41 @@
 package com.group.libraryapp.service.user;
 
+import com.group.libraryapp.dto.user.request.UserCreateRequest;
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
+import com.group.libraryapp.dto.user.response.UserResponse;
 import com.group.libraryapp.repository.user.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 public class UserService {
+    private final UserRepository userRepository;
+    public UserService(JdbcTemplate jdbcTemplate) {
+        this.userRepository = new UserRepository(jdbcTemplate);
+    }
 
-    // 이런건 private final이 맞지
-    private final UserRepository userRepository = new UserRepository();
+    public void saveUser(UserCreateRequest userCreateRequest) {
+        userRepository.saveUser(userCreateRequest.getName(), userCreateRequest.getAge());
+    }
 
-    public void updateUser(JdbcTemplate jdbcTemplate, UserUpdateRequest userUpdateRequest) {
-        if (userRepository.isUserNotExist(jdbcTemplate, userUpdateRequest.getId())) {
+    public List<UserResponse> getUsers() {
+        return userRepository.getUsers();
+    }
+
+    public void updateUser(UserUpdateRequest userUpdateRequest) {
+        if (userRepository.isUserNotExist(userUpdateRequest.getId())) {
             throw new IllegalArgumentException();
         }
 
-        userRepository.updateUserName(jdbcTemplate, userUpdateRequest.getName(), userUpdateRequest.getId());
+        userRepository.updateUserName(userUpdateRequest.getName(), userUpdateRequest.getId());
+    }
+
+    public void deleteuser(String name) {
+        if (userRepository.isUserNotExist(name)) {
+            throw new IllegalArgumentException();
+        }
+
+        userRepository.deleteUserByName(name);
     }
 
 }
