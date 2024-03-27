@@ -3,37 +3,37 @@ package com.group.libraryapp.controller.user;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
 import com.group.libraryapp.dto.user.response.UserResponse;
-import com.group.libraryapp.service.user.UserService;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.group.libraryapp.service.user.UserServiceJDBC;
+import com.group.libraryapp.service.user.UserServiceJPA;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class UserController {
-    private final UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final UserServiceJPA userServiceJPA;
+    public UserController(UserServiceJPA userServiceJdbc) {
+        this.userServiceJPA = userServiceJdbc;
     }
 
     @PostMapping("/user")
     public void saveUser(@RequestBody UserCreateRequest userCreateRequest) {
-        userService.saveUser(userCreateRequest);
+        userServiceJPA.saveUser(userCreateRequest);
     }
 
     @GetMapping("/user")
     public List<UserResponse> getUsers() {
-        return userService.getUsers();
+        return userServiceJPA.getUsers();
     }
 
     @PutMapping("/user")
     public void updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
-        userService.updateUser(userUpdateRequest);
+        userServiceJPA.updateUser(userUpdateRequest);
     }
 
     @DeleteMapping("/user")
     public void deleteUser(@RequestParam String name) {
-        userService.deleteuser(name);
+        userServiceJPA.deleteUser(name);
     }
 
 }
