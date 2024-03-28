@@ -10,28 +10,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserServiceJPA userServiceJPA;
     public UserController(UserServiceJPA userServiceJdbc) {
         this.userServiceJPA = userServiceJdbc;
     }
 
-    @PostMapping("/user")
+    @PostMapping
     public void saveUser(@RequestBody UserCreateRequest userCreateRequest) {
         userServiceJPA.saveUser(userCreateRequest);
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public List<UserResponse> getUsers() {
         return userServiceJPA.getUsers();
     }
 
-    @PutMapping("/user")
+    @PutMapping
     public void updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
         userServiceJPA.updateUser(userUpdateRequest);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping
     public void deleteUser(@RequestParam String name) {
         userServiceJPA.deleteUser(name);
     }
