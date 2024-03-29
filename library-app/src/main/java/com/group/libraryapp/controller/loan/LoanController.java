@@ -1,11 +1,9 @@
 package com.group.libraryapp.controller.loan;
 
 import com.group.libraryapp.dto.loan.request.LoanBookRequest;
+import com.group.libraryapp.dto.loan.request.ReturnBookRequest;
 import com.group.libraryapp.service.loan.LoanService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoanController {
@@ -18,5 +16,10 @@ public class LoanController {
     @PostMapping("/book/loan")
     public void loanBook(@RequestBody LoanBookRequest loanBookRequest) {
         loanService.loanBook(loanBookRequest);
+    }
+
+    @PutMapping("/book/return")
+    public void returnBook(@RequestBody ReturnBookRequest returnBookRequest) {
+        loanService.returnBook(returnBookRequest);
     }
 }

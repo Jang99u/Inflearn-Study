@@ -3,7 +3,7 @@ package com.group.libraryapp.domain.loan;
 import javax.persistence.*;
 
 @Entity
-public class userLoanHistory {
+public class UserLoanHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,9 +14,9 @@ public class userLoanHistory {
     @Column(nullable = false, name = "is_return")
     private boolean isReturn;
 
-    protected userLoanHistory() {}
+    protected UserLoanHistory() {}
 
-    public userLoanHistory(Long userId, String name) {
+    public UserLoanHistory(Long userId, String name) {
         this.userId = userId;
         this.bookName = name;
         this.isReturn = false;
@@ -30,11 +30,15 @@ public class userLoanHistory {
         return userId;
     }
 
-    public String getName() {
+    public String getBookName() {
         return bookName;
     }
 
     public boolean isReturn() {
         return isReturn;
+    }
+
+    public void doReturn() {
+        this.isReturn = true;
     }
 }
